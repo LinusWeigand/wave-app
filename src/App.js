@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import './App.css';
 import abi from "./utils/WavePortal.json";
+import WaveCard from "./WaveCard/WaveCard.js";
 
 const App = () => {
 
   const [currentAccount, setCurrentAccount] = useState("");
   const [allWaves, setAllWaves]= useState([]);
-  const contractAddress = "0xC9C7776b6B8a00F2DABb46eF5b013b639b9629e4";
+  const contractAddress = "0xd3e6B2D9062FEF81877A6121EFecaC4b523285BF";
   const contractABI = abi.abi;
 
   const getAllWaves = async () => {
@@ -145,6 +146,7 @@ const App = () => {
               <div>Address: {wave.address}</div>
               <div>Time: {wave.timestamp.toString()}</div>
               <div>Message: {wave.message}</div>
+              
             </div>
           )
         })}
