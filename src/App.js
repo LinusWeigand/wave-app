@@ -6,10 +6,50 @@ import abi from './utils/WavePortal.json';
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   /**
-   * Create a varaible here that holds the contract address after you deploy!
+   * All state property to store all waves
    */
-  const contractAddress = "0xd5f08a0ae197482FA808cE84E00E97d940dBD26E";
+  const [allWaves, setAllWaves] = useState([]);
+  const contractAddress = "0xAd452bF174148C5dCB36708aBa32A5b39b2b0496";
   const contractABI = abi.abi;
+
+  const getAllWaves = () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+
+        /*
+         * Call the getAllWaves method from your Smart Contract
+         */
+       const waves = await wavePortalContract.getAllWaves();
+
+       /*
+        * We only need address, timestamp, and message our UI so let's
+        * pick those out
+        */
+       let wavesCleaned = [];
+       waves.forEach(wave => {
+         wavesCleaned.push({
+           address: wave.waver,
+           timestamp: new Date(wave.timestamp * 1000),
+           message: wave.message
+         });
+       });
+       /*
+        * Store our data in React state
+        */
+       setAllWaves(wavesCleaned);
+      } else {
+        console.log("Ethereum object doesn't exist!");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  
   
   const checkIfWalletIsConnected = async () => {
     try {
