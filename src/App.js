@@ -11,7 +11,7 @@ const App = () => {
    * All state property to store all waves
    */
   const [allWaves, setAllWaves] = useState([]);
-  const contractAddress = "0x2F431428F26209e2dcD015e9fE69C3b3e6fad597";
+  const contractAddress = "0xB9C218Aa38AeCd8B1b678b3b955539504De9957d";
   const contractABI = abi.abi;
 
   const getAllWaves = async () => {
