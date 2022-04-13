@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import 'antd/dist/antd.css';
+import { Button, Card, Input } from 'antd';
 import { ethers } from "ethers";
 import './App.css';
 import abi from './utils/WavePortal.json';
@@ -95,7 +97,7 @@ const App = () => {
     }
   }
 
-  const wave = async () => {
+  const wave = async (message) => {
     try {
       const { ethereum } = window;
     
@@ -103,14 +105,13 @@ const App = () => {
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
-        console.log(signer.provider.getCode(contractAddress));
         const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
 
         let count = await wavePortalContract.getTotalWaves();
         console.log("Retrieved total wave count...", count.toNumber());
 
         
-        const waveTxn = await wavePortalContract.wave("HALLO");
+        const waveTxn = await wavePortalContract.wave(message);
         console.log("Mining...", waveTxn.hash);
 
         await waveTxn.wait();
@@ -130,6 +131,9 @@ const App = () => {
   useEffect(() => {
     checkIfWalletIsConnected();
   }, [])
+
+  const TextArea = Input;
+  const [text, setText] = useState("");
   
   return (
     <div className="mainContainer">
@@ -142,22 +146,27 @@ const App = () => {
           I am Linus and I work on smart contracts so that's pretty cool right? Connect your Ethereum wallet and wave at me!
         </div>
 
-        <button className="waveButton" onClick={wave}>
+        <TextArea rows={4} value={text} onChange={e => {setText(e.target.value)}}/>
+
+        <Button type="primary" onClick={() => {wave(text)}}>
           Wave at Me
-        </button>
+        </Button>
 
         {!currentAccount && (
-          <button className="waveButton" onClick={connectWallet}>
+          <Button type="secondary" onClick={connectWallet}>
             Connect Wallet
-          </button>
+          </Button>
         )}
 
         {allWaves.map((wave, index) => {
           return (
-            <div key={index} style={{ backgroundColor: "OldLace", marginTop: "16px", padding: "8px"}}>
-              <div>Address: {wave.address}</div>
-              <div>Time: {wave.timestamp.toString()}</div>
-              <div>Message: {wave.message}</div>  
+            <div key={index} className="site-card-border-less-wrapper">
+              <Card type="primary" title={wave.message} bordered={true} style={{width: 600}} >
+              <h4>Address: </h4>
+                <p>{wave.address}</p>
+                <h4>Time: </h4>
+                <p>{wave.timestamp.toString()}</p>
+              </Card>
             </div>
           )
         })}
