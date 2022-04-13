@@ -12,7 +12,7 @@ const App = () => {
   const contractAddress = "0xAd452bF174148C5dCB36708aBa32A5b39b2b0496";
   const contractABI = abi.abi;
 
-  const getAllWaves = () => {
+  const getAllWaves = async () => {
     try {
       const { ethereum } = window;
       if (ethereum) {
@@ -139,7 +139,7 @@ const App = () => {
         </div>
 
         <div className="bio">
-          I am farza and I worked on self-driving cars so that's pretty cool right? Connect your Ethereum wallet and wave at me!
+          I am Linus and I work on smart contracts so that's pretty cool right? Connect your Ethereum wallet and wave at me!
         </div>
 
         <button className="waveButton" onClick={wave}>
